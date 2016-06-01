@@ -44,7 +44,7 @@ void GetHostInfo(){
     printf("System is %s on %s hardware\n", uts.sysname, uts.machine);
     printf("Nodename is %s\n", uts.nodename);
     printf("Version is %s, %s\n", uts.release, uts.version);
-    printf("HostID:%ld", gethostid());
+    printf("HostID:%ld\n", gethostid());
 }
 
 /*

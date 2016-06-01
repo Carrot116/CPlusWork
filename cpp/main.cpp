@@ -32,11 +32,11 @@ void Base::print() {
 
 int main() {
     cout << "Hello, World!" << endl;
-    Base base;
-    base.print();
+//    Base base;
+//    base.print();
 
-    GetUserInfo();
-    GetHostInfo();
+//    GetUserInfo();
+//    GetHostInfo();
 //    testMenu();
 //    testMenu2();
 

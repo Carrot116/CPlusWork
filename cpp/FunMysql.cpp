@@ -4,22 +4,25 @@
 
 #include "../head/FunMysql.h"
 #include <stdio.h>
+#include <cstring>
 
 void connect2mysql(){
+    fprintf(stderr, "\nmysql version:%lu\n", mysql_get_client_version());
     MYSQL* mysql = mysql_init(NULL);
 
     if (!mysql){
-        fprintf(stderr, "error: %s",mysql_error(mysql));
-        fprintf(stderr,"mysql_init faild\n");
+        fprintf(stderr, "\nerror: %s",mysql_error(mysql));
+        fprintf(stderr,"\nmysql_init faild\n");
         return;
     }
 
-    mysql = mysql_real_connect(mysql, "192.168.1.105", "hxl","123456","db_im",0, NULL,0);
+    mysql = mysql_real_connect(mysql, "127.0.0.1", "hxl","123456","db_im",0, NULL,0);
 
-    if (!mysql){
-        fprintf(stderr, "error: %s",mysql_error(mysql));
-        printf("Connecting success!\n");
+    if (mysql){
+        printf("\nConnecting success!\n");
     } else {
-        printf("Connecting fail!\n");
+        fprintf(stderr, "error: %s",mysql_error(mysql));
+        printf("\nConnecting fail!\n");
     }
+    mysql_close(mysql);
 }
