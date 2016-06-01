@@ -8,4 +8,7 @@
 #include <mysql.h>
 
 void connect2mysql();
+
+void testWrapper();
+
 #endif //FIRSTDEMO_FUNMYSQL_H

@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <cstring>
 
+#include "../head/HXLMysql.h"
+
 void connect2mysql(){
     fprintf(stderr, "\nmysql version:%lu\n", mysql_get_client_version());
     MYSQL* mysql = mysql_init(NULL);
@@ -16,13 +18,22 @@ void connect2mysql(){
         return;
     }
 
-    mysql = mysql_real_connect(mysql, "localhost", "hxl","123456","db_im",0, NULL,0);
-
-    if (mysql){
+    if (mysql_real_connect(mysql, "localhost", "hxl","123456","db_im",0, NULL,0)){
         printf("\nConnecting success!\n");
+
+        fprintf(stdout, "select :%d \n", mysql_query(mysql, "insert into t_user(name, age) values ('李四',23)"));
+        fprintf(stdout, "affect :%llu rows\n", mysql_affected_rows(mysql));
     } else {
         fprintf(stderr, "error: %s",mysql_error(mysql));
         printf("\nConnecting fail!\n");
     }
     mysql_close(mysql);
 }
+
+void testWrapper(){
+    HXLMysql instance;
+    instance.connect("localhost", "hxl", "123456", "db_im");
+    fprintf(stdout, "select :%d \n", instance.query("insert into t_user(name, age) values ('赵云',23)"));
+    fprintf(stdout, "affect :%llu rows\n", instance.affected_rows());
+}
+

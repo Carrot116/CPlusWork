@@ -5,9 +5,11 @@
       <sourceFolder url="file://$MODULE_DIR$/head/funHead.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/head/FunMysql.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/cpp/HXLMysql.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cpp/FunMysql.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cpp/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cpp/fun.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/head/HXLMysql.h" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">

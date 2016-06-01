@@ -2,6 +2,7 @@
 #include "../head/funHead.h"
 #include "../head/FunMysql.h"
 
+
 using namespace std;
 
 class Base{
@@ -40,6 +41,7 @@ int main() {
 //    testMenu();
 //    testMenu2();
 
-    connect2mysql();
+//    connect2mysql();
+    testWrapper();
     return 0;
 }
