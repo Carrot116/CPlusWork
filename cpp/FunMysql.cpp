@@ -12,11 +12,11 @@ void connect2mysql(){
 
     if (!mysql){
         fprintf(stderr, "\nerror: %s",mysql_error(mysql));
-        fprintf(stderr,"\nmysql_init faild\n");
+        fprintf(stderr,"\nmysql_init fail\n");
         return;
     }
 
-    mysql = mysql_real_connect(mysql, "127.0.0.1", "hxl","123456","db_im",0, NULL,0);
+    mysql = mysql_real_connect(mysql, "localhost", "hxl","123456","db_im",0, NULL,0);
 
     if (mysql){
         printf("\nConnecting success!\n");
