@@ -31,9 +31,15 @@ void connect2mysql(){
 }
 
 void testWrapper(){
-    HXLMysql instance;
-    instance.connect("localhost", "hxl", "123456", "db_im");
-    fprintf(stdout, "select :%d \n", instance.query("insert into t_user(name, age) values ('赵云',23)"));
-    fprintf(stdout, "affect :%llu rows\n", instance.affected_rows());
+//    HXLMysql instance;
+//    instance.connect("localhost", "hxl", "123456", "db_im");
+//    fprintf(stdout, "select :%d \n", instance.query("insert into t_user(name, age) values ('赵云',23)"));
+//    fprintf(stdout, "affect :%llu rows\n", instance.affected_rows());
+
+//    HXLMysql::test();
+//    HXLMysql::test_lastid();
+//    HXLMysql::test_fetch_data();
+//    HXLMysql::test_fetch_data2();
+    HXLMysql::test_fetch_data3();
 }
 

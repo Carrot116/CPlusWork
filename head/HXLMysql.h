@@ -14,6 +14,13 @@ public:
     HXLMysql();
     virtual ~HXLMysql();
 
+    static void test();
+    static void test_lastid();
+    static void test_fetch_data();
+    static void test_fetch_data2();
+    static void test_fetch_data3();
+
+    static void display_row(MYSQL* mysql, MYSQL_ROW sqlrow);
 public:
     bool connect(string host, string user, string pwd, string db);
     int query(string query);
