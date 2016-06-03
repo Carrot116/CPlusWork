@@ -42,7 +42,8 @@ void testWrapper(){
 //    HXLMysql::test_fetch_data();
 //    HXLMysql::test_fetch_data2();
 //    HXLMysql::test_fetch_data3();
-    HXLMysql::test_fetch_data4();
+//    HXLMysql::test_fetch_data4();
+    testCD();
 }
 
 void testCD(){
@@ -56,7 +57,7 @@ void testCD(){
     res = add_cd(c2s("Mahler"),c2s("Symphony No 1"),c2s("4596102"),&cd_id);
     printf("Result of adding a cd was %d, cd_id is %d\n", res, cd_id);
 
-    memset(ct,0, sizeof(CURRENT_TRACK_ST));
+    memset(ct,0, sizeof(CURRENT_TRACKS_ST));
     ct->cd_id = cd_id;
     strcpy(ct->track[0], c2s("Langsam Schleppend"));
     strcpy(ct->track[1], c2s("Kraftig bewegt"));
@@ -66,7 +67,7 @@ void testCD(){
 
 
     res = find_cds(c2s("Symphony"),cd_res);
-    printf("Found %s cds, first has ID %d\n", res, cd_res->cd_id[0]);
+    printf("Found %d cds, first has ID %d\n", res, cd_res->cd_id[0]);
 
     res = get_cd(cd_res->cd_id[0], cd);
     printf("get_cd returned %d\n", res);
@@ -81,7 +82,7 @@ void testCD(){
         i++;
     };
 
-    ret = delete_cd(cd_res->cd_id[0]);
+    res = delete_cd(cd_res->cd_id[0]);
     printf("Deleted_cd returned %d\n", res);
     database_end();
 }

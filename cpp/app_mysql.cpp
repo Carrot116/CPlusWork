@@ -17,8 +17,8 @@ static int get_start_id(char* artist);
 int database_start(char* name, char*password){
     if (!connected){
         mysql_init(&mysql);
-        if (!mysql_real_connect(&mysql, c2s("localhost"), name, password,c2s("blpcd"), 0, NULL, 0)){
-            fprintf(stderr, "Database connection failure:%d, %s\n", mysql_errno(&msyql), mysql_error(&mysql));
+        if (!mysql_real_connect(&mysql, c2s("127.0.0.1"), name, password,c2s("blpcd"), 0, NULL, 0)){
+            fprintf(stderr, "Database connection failure:%d, %s\n", mysql_errno(&mysql), mysql_error(&mysql));
             connected = 0;
         } else {
             connected = 1;
@@ -96,7 +96,7 @@ int get_artist_id(char* artist){
             mysql_free_result(pRes);
         }
     }
-    if (new_cd_id != -1) return 1;
+    if (artist_id != -1) return 1;
     sprintf(is, c2s("insert into artist(name) values ('%s')"), es);
     res = mysql_query(&mysql, is);
     if (res){
@@ -111,7 +111,7 @@ int get_artist_id(char* artist){
         pRes = mysql_use_result(&mysql);
         if (pRes){
             if ((rowData = mysql_fetch_row(pRes))){
-                sscanf(rowData[0], "%d", &new_cd_id);
+                sscanf(rowData[0], "%d", &artist_id);
             }
             mysql_free_result(pRes);
         }
@@ -232,4 +232,54 @@ int get_cd_track(int cd_id, struct current_tracks_st* dest){
         }
     }
     return num_tracks;
+}
+
+int delete_cd(int cd_id){
+    int res;
+    char qs[250];
+    int artist_id = -1, num_rows;
+    MYSQL_RES* pRes;
+    MYSQL_ROW rowData;
+
+    if (!connected) return 0;
+
+    sprintf(qs, c2s("select artist_id from cd where artist_id = (select artist_id from cd where id = '%d')"),cd_id);
+    res = mysql_query(&mysql, qs);
+    if (res){
+        fprintf(stderr, c2s("Select error %d: %s\n"), MS_ENO(&mysql), MS_EMSG(&mysql));
+        return 0;
+    } else {
+        pRes = mysql_use_result(&mysql);
+        if (pRes){
+            num_rows = (int)mysql_num_rows(pRes);
+            if (num_rows == 1){
+                rowData = mysql_fetch_row(pRes);
+                sscanf(rowData[0], "%d", &artist_id);
+            }
+            mysql_free_result(pRes);
+        }
+    }
+    sprintf(qs, c2s("delete from track where cd_id = '%d'"),cd_id);
+    res = mysql_query(&mysql, qs);
+    if (res){
+        fprintf(stderr, c2s("Delete error (track)%d: %s\n"), MS_ENO(&mysql), MS_EMSG(&mysql));
+        return 0;
+    }
+
+    sprintf(qs, c2s("delete from cd where id = '%d'"),cd_id);
+    res = mysql_query(&mysql, qs);
+    if (res){
+        fprintf(stderr, c2s("Delete error (cd)%d: %s\n"), MS_ENO(&mysql), MS_EMSG(&mysql));
+        return 0;
+    }
+
+    if (artist_id != -1){
+        sprintf(qs,c2s("Delete from artist where id = '%d'"),artist_id);
+        res = mysql_query(&mysql, qs);
+        if (res){
+            fprintf(stderr, c2s("Delete error (artist)%d: %s\n"), MS_ENO(&mysql), MS_EMSG(&mysql));
+            return 0;
+        }
+    }
+    return 1;
 }
