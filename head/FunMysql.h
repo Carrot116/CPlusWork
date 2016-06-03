@@ -11,4 +11,5 @@ void connect2mysql();
 
 void testWrapper();
 
+void testCD();
 #endif //FIRSTDEMO_FUNMYSQL_H

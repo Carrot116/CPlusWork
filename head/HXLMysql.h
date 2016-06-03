@@ -19,8 +19,10 @@ public:
     static void test_fetch_data();
     static void test_fetch_data2();
     static void test_fetch_data3();
+    static void test_fetch_data4();
 
     static void display_row(MYSQL* mysql, MYSQL_ROW sqlrow);
+    static void display_header(MYSQL* mysql, MYSQL_RES* result);
 public:
     bool connect(string host, string user, string pwd, string db);
     int query(string query);

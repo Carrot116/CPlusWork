@@ -196,7 +196,11 @@ void HXLMysql::display_row(MYSQL* mysql, MYSQL_ROW sqlrow){
     unsigned int field_count = 0;
 
     while (field_count < mysql_field_count(mysql)){
-        printf("%s ", sqlrow[field_count]);
+        if (sqlrow[field_count]){
+            printf("%s\t", sqlrow[field_count]);
+        } else {
+            printf("NULL");
+        }
         field_count++;
     }
     printf("\n");
@@ -220,6 +224,78 @@ void HXLMysql::test_fetch_data3(){
             if (res_ptr){
                 while ((sqlrow = mysql_fetch_row(res_ptr))){
                     printf("Fetched Data...\n");
+                    HXLMysql::display_row(mysql, sqlrow);
+                };
+
+                if (mysql_errno(mysql)){
+                    fprintf(stderr, "Retrieved error:%s\n", mysql_error(mysql));
+                }
+                mysql_free_result(res_ptr);
+            }
+        }
+        mysql_close(mysql);
+    } else {
+        fprintf(stderr, "Connection failed\n");
+        if (mysql_errno(mysql)){
+            fprintf(stderr, "Insert error %d :%s", mysql_errno(mysql), mysql_error(mysql));
+        }
+    }
+}
+
+//MYSQL_FIELD *mysql_fetch_field(MYSQL_RES* result);
+//MYSQL_FIELD_OFFSET mysql_field_seek(MYSQL_RES* result, MYSQL_FIELD_OFFSET offset);
+void HXLMysql::display_header(MYSQL* mysql, MYSQL_RES* result){
+    MYSQL_FIELD* field_ptr;
+
+    printf("Column details:\n");
+    while ((field_ptr = mysql_fetch_field(result)) != NULL) {
+        printf("\t Name: %s\n", field_ptr->name);
+        printf("\t Type: ");
+        if (IS_NUM(field_ptr->type)) {
+            printf("Numeric field\n");
+        } else {
+            switch (field_ptr->type) {
+                case FIELD_TYPE_VAR_STRING:
+                    printf("VARCHAR\n");
+                    break;
+                case FIELD_TYPE_LONG:
+                    printf("LONG\n");
+                    break;
+                default:
+                    printf("Type is %d, check in mysql_com.h\n", field_ptr->type);
+                    break;
+            }
+        }
+        printf("\t Max Width %ld\n", field_ptr->length);
+        if (field_ptr->flags & AUTO_INCREMENT_FLAG){
+            printf("\t Auto increments\n");
+        }
+        printf("\n");
+    }
+}
+void HXLMysql::test_fetch_data4(){
+    MYSQL* mysql;
+    MYSQL_RES* res_ptr;
+    MYSQL_ROW sqlrow;
+
+    int res;
+    mysql = mysql_init(NULL);
+    if (mysql_real_connect(mysql, "localhost","hxl","123456","db_im", 0 , NULL, 0)) {
+        printf("Connection success\n");
+        char* sql = (char*)"select * from children";
+        res = mysql_query(mysql, sql);
+        if (res){
+            printf("select error: %s\n", mysql_error(mysql));
+        } else {
+            bool bFirstRow = true;
+            res_ptr = mysql_use_result(mysql);
+            if (res_ptr){
+                while ((sqlrow = mysql_fetch_row(res_ptr))){
+                    if (bFirstRow){
+                        HXLMysql::display_header(mysql, res_ptr);
+                        bFirstRow = false;
+                    }
+//                    printf("Fetched Data...\n");
                     HXLMysql::display_row(mysql, sqlrow);
                 };
 
